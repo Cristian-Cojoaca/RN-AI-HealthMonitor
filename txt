@@ -1,0 +1,29 @@
+## 2. Descrierea Setului de Date
+
+### 2.1 Sursa datelor
+
+* **Origine:** dataset public: Framingham heart study dataset, UCI machine learning dataset - Heart Disease
+* **Modul de achiziție:** Fisier extern
+* **Perioada/ condițiile colectării:**
+
+### 2.2 Caracteristicile dataset-ului
+
+* **Număr total de observații:**[3000]
+* **Număr de caracteristici (features):**[11]
+* **Tipuri de date:** Numerice, Categoriale
+* **Format fișiere:**
+
+### 2.3 Descrierea fiecărei caracteristici
+
+| **Caracteristică** | **Tip** | **Unitate** | **Descriere** | **Domeniu valori** |
+|Vârstă | numeric | ani | Vârsta pacienților | 32-70 |
+| Sex | categorial | - |1-bărbat, 0 - femeie| {0,1} | 
+| Fumător | categorial | - | 1-da, 0 - nu | {0,1} |
+| Numărul de țigari pe zi | numeric | - | numarul de tigari fumate pe zi | {0-60}
+|Medicatie presiune arterială | categorial | - | 1 - da, 0 - nu | {0,1} |
+|ACC | categorial | - | 1 - da, 0 - nu | {0,1} |
+|colesterol | numeric | mg/dl | - | {110-696} |
+|Presiunea arterială | numeric | mmHg | - | {83.5, 295} |
+| Ritmul cardiac | numeric | batai/min | - | {50-110} |
+|Riscul de îmbolnavire | categorial | - |1 - da, 0 - nu | {0,1}
+|Diagnostic | numeric | - | 
