@@ -1,0 +1,87 @@
+import pandas as pd
+import numpy as np
+import os
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.impute import SimpleImputer
+
+
+print(">>> 1. Încărcare date...")
+
+df = pd.read_csv(r'C:\Proiect RN\src\data\raw\framingham.csv')
+print(f"Dimensiuni inițiale: {df.shape}")
+
+
+print("\n>>> 2. Curățare date...")
+
+
+df = df.drop_duplicates()
+
+
+imputer_median = SimpleImputer(strategy='median')
+imputer_mode = SimpleImputer(strategy='most_frequent')
+
+
+cols_numeric = ['glucose', 'BMI', 'totChol', 'heartRate']
+df[cols_numeric] = imputer_median.fit_transform(df[cols_numeric])
+
+
+cols_discrete = ['cigsPerDay', 'BPMeds', 'education']
+df[cols_discrete] = imputer_mode.fit_transform(df[cols_discrete])
+
+
+df = df.dropna()
+print(f"Dimensiuni după curățare: {df.shape}")
+
+
+print("\n>>> 3. Transformare și Normalizare...")
+
+
+numeric_features = ['age', 'cigsPerDay', 'totChol', 'sysBP', 'diaBP', 'BMI', 'heartRate', 'glucose']
+scaler = MinMaxScaler()
+
+
+df[numeric_features] = scaler.fit_transform(df[numeric_features])
+
+print("Exemplu date normalizate (primele 3 rânduri):")
+print(df[numeric_features].head(3))
+
+
+print("\n>>> 4. Împărțire Train / Validation / Test...")
+
+
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+
+for train_index, temp_index in split.split(df, df['TenYearCHD']):
+    train_set = df.iloc[train_index]
+    temp_set = df.iloc[temp_index]
+
+
+split_val_test = StratifiedShuffleSplit(n_splits=1, test_size=0.5, random_state=42)
+
+for val_index, test_index in split_val_test.split(temp_set, temp_set['TenYearCHD']):
+    val_set = temp_set.iloc[val_index]
+    test_set = temp_set.iloc[test_index]
+
+print(f"Set Antrenare: {train_set.shape} (80%)")
+print(f"Set Validare:  {val_set.shape} (10%)")
+print(f"Set Testare:   {test_set.shape} (10%)")
+
+
+paths = {
+    'train': 'data/train/train.csv',
+    'validation': 'data/validation/validation.csv',
+    'test': 'data/test/test.csv'
+}
+for path in paths.values():
+    folder_path = os.path.dirname(path)
+    os.makedirs(folder_path, exist_ok=True) 
+
+
+train_set.to_csv(paths['train'], index=False)
+val_set.to_csv(paths['validation'], index=False)
+test_set.to_csv(paths['test'], index=False)
+
+print("Procesare finalizată cu succes! Fișierele au fost salvate în folderul 'data'.")
+
+print("Procesare finalizată cu succes!")
